@@ -109,7 +109,6 @@ class AbstractField(object):
 class StringField(AbstractField):
     coretype = 'string'
     fields = ['doc_values', 'term_vector', 'norms', 'index_options', 'analyzer', 'index_analyzer', 'search_analyzer', 'include_in_all', 'ignore_above', 'position_offset_gap', 'fielddata', 'similarity']
-    defaults = {'analyzer': 'snowball'}
 
     def value(self, obj):
         val = super(StringField, self).value(obj)
