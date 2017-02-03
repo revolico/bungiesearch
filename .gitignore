@@ -1,9 +1,11 @@
 *.pyc
 *.egg
 
+/.idea/
 /venv
 /build/
 /dist/
 /cache/
 /.cache/
 /bungiesearch.egg-info/
+/env/
