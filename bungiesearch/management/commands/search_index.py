@@ -158,7 +158,7 @@ class Command(BaseCommand):
                 logger.info('Creating index {} with {} doctypes.'.format(index, len(mapping)))
                 es.indices.create(index=index, body={'mappings': mapping, 'settings': {'analysis': analysis}})
 
-            es.cluster.health(index=','.join(indices), wait_for_status='green', timeout='30s')
+            es.cluster.health(index=','.join(indices), wait_for_status='yellow', timeout='30s')
 
         elif options['action'] == 'update-mapping':
             if options['index']:
