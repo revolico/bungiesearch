@@ -36,8 +36,13 @@ class Bungiesearch(Search):
             return
         cls.__loaded_indices__ = True
 
+        if settings.TEST_MODE:
+            indices = cls.BUNGIE['INDICES_TEST']
+        else:
+            indices = cls.BUNGIE['INDICES']
+
         # Loading indices.
-        for index_name, module_str in iteritems(cls.BUNGIE['INDICES']):
+        for index_name, module_str in iteritems(indices):
             index_module = import_module(module_str)
             for index_obj in itervalues(index_module.__dict__):
                 try:
