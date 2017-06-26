@@ -162,4 +162,4 @@ def django_field_to_index(field, **attr):
     elif dj_type in ('BigIntegerField'):
         return NumberField(coretype='long', **attr)
 
-    return StringField(**attr)
+    return StringField(coretype='keyword', **attr)
