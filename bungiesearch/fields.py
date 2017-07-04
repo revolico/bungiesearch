@@ -109,7 +109,8 @@ class AbstractField(object):
 class StringField(AbstractField):
     # The [string] type is deprecated, please use [text] or [keyword] in 5.x
     coretype = ['text', 'keyword']
-    fields = ['doc_values', 'term_vector', 'norms', 'index_options', 'analyzer', 'index_analyzer', 'search_analyzer', 'include_in_all', 'ignore_above', 'position_offset_gap', 'fielddata', 'similarity']
+    fields = ['term_vector', 'norms', 'index_options', 'analyzer', 'search_analyzer', 'include_in_all', 'fielddata',
+              'similarity', 'eager_global_ordinals', 'fielddata_frequency_filter', 'position_increment_gap']
 
     def value(self, obj):
         val = super(StringField, self).value(obj)
@@ -121,15 +122,15 @@ class StringField(AbstractField):
         return 'StringField'
 
 class NumberField(AbstractField):
-    coretype = ['float', 'double', 'byte', 'short', 'integer', 'long']
-    fields = ['doc_values', 'precision_step', 'include_in_all', 'ignore_malformed', 'coerce']
+    coretype = ['scaled_float', 'half_float', 'float', 'double', 'byte', 'short', 'integer', 'long']
+    fields = ['doc_values', 'include_in_all', 'ignore_malformed', 'coerce', 'scaling_factor']
 
     def __unicode__(self):
         return 'NumberField'
 
 class DateField(AbstractField):
     coretype = 'date'
-    fields = ['format', 'doc_values', 'precision_step', 'include_in_all', 'ignore_malformed']
+    fields = ['format', 'doc_values', 'include_in_all', 'ignore_malformed', 'locale']
 
     def __unicode__(self):
         return 'DateField'
