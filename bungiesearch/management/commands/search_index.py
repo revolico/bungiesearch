@@ -39,12 +39,6 @@ class Command(BaseCommand):
             const='delete',
             help='Delete the index specified in the settings. Requires the "--guilty-as-charged" flag.')
         parser.add_argument(
-            '--delete-mapping',
-            action='store_const',
-            dest='action',
-            const='delete-mapping',
-            help='Delete the mapping of specified models (or all models) on the index specified in the settings. Requires the "--guilty-as-charged" flag.')
-        parser.add_argument(
             '--guilty-as-charged',
             action='store_true',
             dest='confirmed',
@@ -105,37 +99,18 @@ class Command(BaseCommand):
         if not options['action']:
             raise ValueError('No action specified. Must be one of "create", "update" or "delete".')
 
-        if options['action'].startswith('delete'):
+        if options['action'] == 'delete':
             if not options['confirmed']:
                 raise ValueError('If you know what a delete operation does (on index or mapping), add the --guilty-as-charged flag.')
-            if options['action'] == 'delete':
-                if options['index']:
-                    indices = [options['index']]
-                else:
-                    indices = src.get_indices()
 
-                for index in indices:
-                    logger.warning('Deleting elastic search index {}.'.format(index))
-                    es.indices.delete(index=index, ignore=404)
-
+            if options['index']:
+                indices = [options['index']]
             else:
-                index_to_doctypes = defaultdict(list)
-                if options['models']:
-                    logger.info('Deleting mapping for models {} on index {}.'.format(options['models'], index))
-                    for model_name in options['models'].split():
-                        for index in src.get_index(model_name):
-                            index_to_doctypes[index].append(model_name)
-                elif options['index']:
-                    index = options['index']
-                    logger.info('Deleting mapping for all models on index {}.'.format(index))
-                    index_to_doctypes[index] = src.get_models(index)
-                else:
-                    for index in src.get_indices():
-                        index_to_doctypes[index] = src.get_models(index)
-                    logger.info('Deleting mapping for all models ({}) on all indices ({}).'.format(index_to_doctypes.values(), index_to_doctypes.keys()))
+                indices = src.get_indices()
 
-                for index, doctype_list in iteritems(index_to_doctypes):
-                    es.indices.delete_mapping(index, ','.join(doctype_list), params=None)
+            for index in indices:
+                logger.warning('Deleting elastic search index {}.'.format(index))
+                es.indices.delete(index=index, ignore=404)
 
         elif options['action'] == 'create':
             if options['index']:
